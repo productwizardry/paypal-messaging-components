@@ -22,6 +22,13 @@ const tests = [].concat(
 describe(`DE > flex (Test Count: ${tests.length * accounts.length})`, () => {
     const runBannerTest = createBannerTest('DE');
 
+    const newEnv = Object.entries(process.env).reduce((object, [key, value]) => {
+        return key.includes('npm_') ? object : { ...object, [key]: value };
+    }, {});
+
+    console.log('ENVIRONMENT');
+    console.log(newEnv);
+
     describe.each(accounts)(`> %s (Test Count: ${tests.length})`, account => {
         const getConfig = style => ({
             account,

@@ -4,12 +4,6 @@ import selectors from './utils/selectors';
 
 const isComparingSnapshots = process.env.DIRTY_SNAPSHOTS == 0; // eslint-disable-line eqeqeq
 
-const newEnv = Object.entries(process.env).reduce((object, [key, value]) => {
-    return key.includes('npm_') ? object : { ...object, [key]: value };
-}, {});
-
-console.log(newEnv);
-
 const toMatchImageSnapshot = configureToMatchImageSnapshot({
     failureThresholdType: 'percent',
     failureThreshold: 0.002,
@@ -133,10 +127,9 @@ export default function createBannerTest(locale, testPage = 'banner.html') {
             };
             const snapshotDimensions = config?.style?.layout === 'text' ? paddedDimensions : bannerDimensions;
 
-            if (isComparingSnapshots) {
-                // eslint-disable-next-line no-console
-                console.log(`Taking screenshot of [${testName}] with dimensions ${JSON.stringify(snapshotDimensions)}`);
-            }
+            // eslint-disable-next-line no-console
+            console.log(`Taking screenshot of [${testName}] with dimensions ${JSON.stringify(snapshotDimensions)}`);
+
             const image = await page.screenshot(
                 {
                     clip: {

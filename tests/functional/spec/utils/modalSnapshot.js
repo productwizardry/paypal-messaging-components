@@ -1,7 +1,5 @@
 import { configureToMatchImageSnapshot } from 'jest-image-snapshot';
 
-const isComparingSnapshots = process.env.DIRTY_SNAPSHOTS == 0; // eslint-disable-line eqeqeq
-
 const toMatchImageSnapshot = configureToMatchImageSnapshot({
     failureThresholdType: 'percent',
     failureThreshold: 0.002,
@@ -13,10 +11,8 @@ const toMatchImageSnapshot = configureToMatchImageSnapshot({
 expect.extend({ toMatchImageSnapshot });
 
 const modalSnapshot = async (testNameParts, viewport, account) => {
-    if (isComparingSnapshots) {
-        // eslint-disable-next-line no-console
-        console.log(`Taking screenshot of [${testNameParts}] with dimensions ${JSON.stringify(viewport)}`);
-    }
+    // eslint-disable-next-line no-console
+    console.log(`Taking screenshot of [${testNameParts}] with dimensions ${JSON.stringify(viewport)}`);
 
     const image = await page.screenshot(
         {
