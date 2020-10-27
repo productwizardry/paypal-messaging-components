@@ -11,7 +11,7 @@ if [[ "$TRAVIS_PULL_REQUEST" = "false" ]] && [[ "$TRAVIS_BRANCH" = "develop" ]];
     done < $OLD_SNAPSHOT_FILES_LIST
 
     echo 'UPDATE NEW SNAPSHOTS'
-    npm run test:func -- -u
+    npm run test:func:ciupdate
 
     # Uses GNU sed syntax
     sed -i -e 's/DIRTY_SNAPSHOTS=1/DIRTY_SNAPSHOTS=0/g' .travis.yml
