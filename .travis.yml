@@ -22,6 +22,7 @@ addons:
         - localhost.paypal.com
 
 before_install:
+    - python2 -c 'import os,sys,fcntl; flags = fcntl.fcntl(sys.stdout, fcntl.F_GETFL); fcntl.fcntl(sys.stdout, fcntl.F_SETFL, flags&~os.O_NONBLOCK);'
     - npm i -g npm@6
 
 before_script:
