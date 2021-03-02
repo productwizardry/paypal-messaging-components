@@ -37,7 +37,8 @@
         "test:func": "jest --detectOpenHandles --runInBand --verbose --config tests/functional/jest.allFunctional.config.js",
         "test:func:nosnaps": "jest --detectOpenHandles --runInBand --verbose --config tests/functional/jest.noSnapshots.config.js",
         "test:func:ciupdate": "jest --verbose --config tests/functional/jest.allFunctional.config.js --updateSnapshot",
-        "test:func:update": "sed -i '' -e 's/DIRTY_SNAPSHOTS=0$/DIRTY_SNAPSHOTS=1/g' .travis.yml"
+        "test:func:update": "sed -i '' -e 's/DIRTY_SNAPSHOTS=0$/DIRTY_SNAPSHOTS=1/g' .travis.yml",
+        "create:docimages": "node utils/createDevDocImages.mjs"
     },
     "dependencies": {
         "@paypal/sdk-client": "^4.0.80",
@@ -63,6 +64,7 @@
         "babel-eslint": "^10.0.1",
         "babel-jest": "^25.1.0",
         "babel-plugin-module-resolver": "^4.0.0",
+        "command-line-args": "^5.1.1",
         "eslint": "^6.8.0",
         "eslint-config-airbnb": "^18.0.1",
         "eslint-config-airbnb-base": "^14.0.0",
@@ -90,6 +92,7 @@
         "prettier-eslint": "^9.0.1",
         "puppeteer": "^2.0.0",
         "qs": "^6.9.3",
+        "shelljs": "^0.8.4",
         "webpack": "^4.32.0",
         "webpack-dev-server": "^3.4.1"
     },

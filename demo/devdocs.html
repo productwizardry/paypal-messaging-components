@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Messaging.js Dev Sandbox</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <script src="//localhost.paypal.com:8080/messaging.js"></script>
+
+        <style>
+            body {
+                padding: 0;
+                margin: 0;
+            }
+
+            h4 {
+                background: #ccc;
+                margin: 0;
+                padding: 0.1rem 0.3rem;
+                font-family: monospace;
+            }
+
+            [data-pp-id],
+            [class*='multi'] {
+                padding: 10px;
+            }
+
+            [class*='multi'] [data-pp-id] {
+                padding: 0;
+            }
+
+            [class*='white'] {
+                background: #444444;
+            }
+
+            [class*='flex'] {
+                background: white;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container"></div>
+        <script src="./helpers/utils.js"></script>
+        <script>
+            const AMOUNT = 500;
+            const query = window.location.search.substring(1);
+            const mappedParams = query.split('&').reduce((accumulator, param) => {
+                const [key, value] = param.split('=');
+                accumulator[key] = decodeURIComponent(value);
+                return accumulator;
+            }, {});
+            const { account } = mappedParams;
+
+            const container = document.querySelector('.container');
+
+            const padAccount = accountArg => {
+                const account = accountArg.toUpperCase();
+                const ACCOUNT_MAX_LENGTH = 13;
+                const DEV_PREFIX = 'DEV';
+                const padLength = ACCOUNT_MAX_LENGTH - (DEV_PREFIX.length + account.length);
+                const pad = Array(padLength + 1).join('0');
+                return `${DEV_PREFIX}${pad}${account}`;
+            };
+            const nonQualifyingAccount = padAccount(account);
+            const qualifyingAccount = padAccount(account + 'Q');
+            // const nonQualifyingAccount = mappedParams.nonQualifying;
+            // const qualifyingAccount = mappedParams.qualifying;
+
+            const createMultiContainer = ({ name, sizes }) => {
+                const h4 = document.createElement('h4');
+                h4.textContent = `message-text-alternative-left-black-GPL-multi-${name}`;
+                container.appendChild(h4);
+
+                const multiContainer = document.createElement('div');
+                multiContainer.className = h4.textContent;
+                container.appendChild(multiContainer);
+                sizes.forEach(size => {
+                    const config = {
+                        account: qualifyingAccount,
+                        amount: AMOUNT,
+                        style: {
+                            layout: 'text',
+                            text: { size, color: 'black' },
+                            logo: { position: 'left', type: 'alternative' }
+                        }
+                    };
+
+                    const wrapper = document.createElement('div');
+                    multiContainer.appendChild(wrapper);
+
+                    paypal.Messages(config).render(wrapper);
+                });
+            };
+
+            // message-text-alternative-left-black-GPL-multi-{name}
+            createMultiContainer({ name: 'small', sizes: [10, 11] });
+            createMultiContainer({ name: 'default', sizes: [12] });
+            createMultiContainer({ name: 'large', sizes: [13, 14, 15, 16] });
+
+            // prettier-ignore
+            const textColors = [
+                'black',
+                'white',
+                'monochrome',
+                'grayscale',
+            ];
+            const textLogoTypes = ['primary', 'alternative', 'inline', 'none'];
+            const textLogoPositions = ['left', 'top', 'right'];
+
+            // prettier-ignore
+            const flexColors = [
+                ...textColors,
+                'blue',
+                // 'white-no-border',
+                'gray',
+            ];
+            const flexRatios = ['20x1', '8x1', '1x4'];
+
+            const configs = [
+                // message-flex-1x1-{color}
+                ...flexColors.map(color => ({ layout: 'flex', ratio: '1x1', color })),
+                // message-flex-{ratio}-blue-GPL
+                ...flexRatios.map(ratio => ({ layout: 'flex', ratio, color: 'blue' })),
+                // message-text-{type}-left-black-GPL or message-text-{type}-black-GPL
+                ...textLogoTypes.map(type => ({
+                    layout: 'text',
+                    text: { size: 12, color: 'black' },
+                    logo: { position: 'left', type }
+                })),
+                // message-text-primary-{position}-black-GPL
+                ...textLogoPositions.map(position => ({
+                    layout: 'text',
+                    text: { size: 12, color: 'black' },
+                    logo: { position, type: 'primary' }
+                })),
+                // message-text-primary-left-{color}-GPL
+                ...textColors.map(color => ({
+                    layout: 'text',
+                    text: { size: 12, color },
+                    logo: { position: 'left', type: 'primary' }
+                })),
+                // message-text-primary-left-black-nonqualifying-GPL
+                {
+                    layout: 'text',
+                    text: { size: 12, color: 'black' },
+                    logo: { position: 'left', type: 'primary' },
+                    nonqual: true
+                }
+            ];
+
+            const hasPosition = type => type === 'primary' || type === 'alternative';
+
+            configs.forEach(({ nonqual, ...style }) => {
+                const config = {
+                    style,
+                    account: nonqual ? nonQualifyingAccount : qualifyingAccount,
+                    amount: nonqual ? undefined : AMOUNT
+                };
+                const { layout, ratio, color, logo, text } = style;
+                const layoutString = logo
+                    ? `${logo.type}-${hasPosition(logo.type) ? logo.position : ''}-${text.color}`
+                    : `${ratio}-${color}`;
+                const nonQualifyingString = nonqual ? 'nonqualifying' : '';
+
+                const h4 = document.createElement('h4');
+                h4.textContent = `message-${layout}-${layoutString}-${nonQualifyingString}-GPL`.replace(/--/g, '-');
+                container.appendChild(h4);
+
+                const wrapper = document.createElement('div');
+                wrapper.className = h4.textContent;
+                container.appendChild(wrapper);
+
+                paypal.Messages(config).render(wrapper);
+            });
+        </script>
+    </body>
+</html>
