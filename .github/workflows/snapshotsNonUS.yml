@@ -49,12 +49,11 @@ jobs:
               uses: dorny/paths-filter@v2
               id: filter
               with:
-                  # DE is first since it takes the longest
-                  filters: |
-                      DE: '**/DE/**'
-                      AU: '**/AU/**'
-                      FR: '**/FR/**'
-                      GB: '**/GB/**'
+                  filters: .github/locales.yml
+
+            # if none of the filter paths match, another file was changed that affect all locales
+            - name: Set paths to all locales if none were filtered
+              if: steps.filter.outputs.changes == '[]'
 
     snapshots:
         name: Non-US Snapshots
