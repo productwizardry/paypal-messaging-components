@@ -4,41 +4,41 @@ on:
         branches:
             - develop
             - release
-        paths:
-            # Generic
-            - server/**
-            - src/**
-            - tests/functional/spec/*
-            - tests/functional/spec/utils/**
-            - utils/**
-            # ignores all locales and content
-            - '!server/locale/**'
-            - '!src/components/modal/content/**'
-            # US Specific
-            - banners/US/**
-            - modals/US/**
-            # re-includes US locales and US content
-            - server/locale/US/**
-            - src/components/modal/content/US*/**
-            - tests/functional/spec/US/**
+        # paths:
+        #     # Generic
+        #     - server/**
+        #     - src/**
+        #     - tests/functional/spec/*
+        #     - tests/functional/spec/utils/**
+        #     - utils/**
+        #     # ignores all locales and content
+        #     - '!server/locale/**'
+        #     - '!src/components/modal/content/**'
+        #     # US Specific
+        #     - banners/US/**
+        #     - modals/US/**
+        #     # re-includes US locales and US content
+        #     - server/locale/US/**
+        #     - src/components/modal/content/US*/**
+        #     - tests/functional/spec/US/**
     pull_request:
-        paths:
-            # Generic
-            - server/**
-            - src/**
-            - tests/functional/spec/*
-            - tests/functional/spec/utils/**
-            - utils/**
-            # ignores all locales and content
-            - '!server/locale/**'
-            - '!src/components/modal/content/**'
-            # US Specific
-            - banners/US/**
-            - modals/US/**
-            # re-includes US locales and US content
-            - server/locale/US/**
-            - src/components/modal/content/US*/**
-            - tests/functional/spec/US/**
+        # paths:
+        #     # Generic
+        #     - server/**
+        #     - src/**
+        #     - tests/functional/spec/*
+        #     - tests/functional/spec/utils/**
+        #     - utils/**
+        #     # ignores all locales and content
+        #     - '!server/locale/**'
+        #     - '!src/components/modal/content/**'
+        #     # US Specific
+        #     - banners/US/**
+        #     - modals/US/**
+        #     # re-includes US locales and US content
+        #     - server/locale/US/**
+        #     - src/components/modal/content/US*/**
+        #     - tests/functional/spec/US/**
 jobs:
     snapshots:
         name: US Snapshots
@@ -77,6 +77,7 @@ jobs:
                   fi
 
             - name: US Snapshots - ${{ matrix.testPathPattern }}
+              if: "!contains(github.event.head_commit.message, '[snapshots]')"
               run: |
                   npm run test:func -- --testPathPattern spec/US/${{ matrix.testPathPattern }}
                   ./scripts/snapshot-tests/collect-diffs.sh
