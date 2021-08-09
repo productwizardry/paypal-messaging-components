@@ -84,7 +84,9 @@ jobs:
 
             - name: Update Snapshots - US
               if: contains(github.event.head_commit.message, '[snapshots]')
-              run: npm run test:func:ciupdate -- --testPathPattern spec/US/${{ matrix.testPathPattern }}
+              run: |
+                  npm run test:func:ciupdate -- --testPathPattern spec/US/${{ matrix.testPathPattern }}
+                  git status
 
             - name: Commit Updated Snapshots - US Banner and Custom
               uses: stefanzweifel/git-auto-commit-action@v4
