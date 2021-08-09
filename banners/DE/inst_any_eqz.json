@@ -15,9 +15,9 @@
     },
 
     "headline": [
-        ["Bezahlen Sie in {total_payments} monatlichen Raten bei 0% effektivem Jahreszins", ["default", "small"]],
-        ["{total_payments} monatlichen Raten bei 0% effektivem Jahreszins", ["xsmall"]],
-        ["{total_payments} monatlichen Raten", ["xsmall.2"]]
+        ["Bezahlen Sie in {total_payments}  Raten bei 0% effektivem Jahreszins", ["default", "small"]],
+        ["{total_payments}  Raten bei 0% effektivem Jahreszins", ["xsmall"]],
+        ["{total_payments}  Raten", ["xsmall.2"]]
     ],
 
     "subHeadline": [],
