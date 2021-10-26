@@ -2,7 +2,7 @@ name: Update Snapshots - Non-US
 on:
     # allow for manual triggers
     workflow_dispatch: {}
-
+    pull_request: {}
     pull_request_target:
         types: [labeled]
 
@@ -16,35 +16,8 @@ jobs:
             matrix:
                 # locale: [DE, AU, FR, GB]
                 locale: [AU]
-                node: [12]
         steps:
-            - name: Checkout repo
-              uses: actions/checkout@v2
-
-            - name: Setup node
-              uses: actions/setup-node@v1
-              with:
-                  node-version: ${{ matrix.node }}
-
-            - name: 📥 Download deps
-              uses: bahmutov/npm-install@v1
-              with:
-                  useLockFile: false
-
-            - name: Set domain
-              run: echo "127.0.0.1 localhost.paypal.com" | sudo tee -a /etc/hosts
-
-            - name: Run server
-              run: |
-                  ((npm run dev:standalone 2>&1 & echo $! > pid.log) | tee server.log) &
-                  sleep 40
-                  error_count=$(grep -i error server.log | wc -l)
-                  echo "Errors Found: $error_count"
-                  if [[ $error_count -gt 0 ]]; then
-                      echo "Exiting server"
-                      kill $(<pid.log)
-                      exit 1
-                  fi
+            - uses: ./.github/composites/runServer
 
             - name: Update Banner Snapshots - ${{ matrix.locale }}
               run: |

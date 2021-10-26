@@ -1,4 +1,4 @@
-name: Snapshot Comparison Tests - Non-US
+name: Snapshot Comparisons - Non-US
 on:
     # allow for manual triggers
     workflow_dispatch: {}
@@ -40,27 +40,6 @@ on:
             - '!tests/functional/spec/US/**'
 
 jobs:
-    # TODO: use this to run files for any generic change that affects all locales.
-    #       currently changedFiles will only trigger tests for locale-specific changes.
-    # changedFiles:
-    #     name: Get Changed Locales
-    #     runs-on: ubuntu-latest
-    #     outputs:
-    #         locales: ${{ steps.filter.outputs.changes }}
-    #     steps:
-    #         - name: Checkout repo
-    #           uses: actions/checkout@v2
-
-    #         - name: Filter locale paths
-    #           uses: dorny/paths-filter@v2
-    #           id: filter
-    #           with:
-    #               filters: .github/locales.yml
-
-    #         # if none of the filter paths match, another file was changed that affect all locales
-    #         - name: Set paths to all locales if none were filtered
-    #           if: steps.filter.outputs.changes == '[]'
-
     compareSnapshots:
         name: Non-US
         runs-on: ubuntu-latest
@@ -69,36 +48,10 @@ jobs:
             fail-fast: false
             matrix:
                 # locale: ${{ fromJSON(needs.changedFiles.outputs.locales) }}
-                locale: [DE, AU, FR, GB]
-                node: [12]
+                # locale: [DE, AU, FR, GB]
+                locale: [AU]
         steps:
-            - name: Checkout repo
-              uses: actions/checkout@v2
-
-            - name: Setup node
-              uses: actions/setup-node@v1
-              with:
-                  node-version: ${{ matrix.node }}
-
-            - name: 📥 Download deps
-              uses: bahmutov/npm-install@v1
-              with:
-                  useLockFile: false
-
-            - name: Set domain
-              run: echo "127.0.0.1 localhost.paypal.com" | sudo tee -a /etc/hosts
-
-            - name: Run server
-              run: |
-                  ((npm run dev:standalone 2>&1 & echo $! > pid.log) | tee server.log) &
-                  sleep 40
-                  error_count=$(grep -i error server.log | wc -l)
-                  echo "Errors Found: $error_count"
-                  if [[ $error_count -gt 0 ]]; then
-                      echo "Exiting server"
-                      kill $(<pid.log)
-                      exit 1
-                  fi
+            - uses: ./.github/composites/runServer
 
             - name: Compare Banner Snapshots - ${{ matrix.locale }}
               continue-on-error: true
