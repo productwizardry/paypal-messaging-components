@@ -1,4 +1,4 @@
-name: Update Snapshot Tests
+name: Update Snapshots
 on:
     # allow for manual triggers
     workflow_dispatch: {}

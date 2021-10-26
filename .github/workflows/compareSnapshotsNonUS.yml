@@ -1,4 +1,4 @@
-name: Compare Snapshot Tests
+name: Snapshot Comparison Tests
 on:
     # allow for manual triggers
     workflow_dispatch: {}
@@ -69,6 +69,7 @@ jobs:
         # needs: changedFiles
         strategy:
             matrix:
+                fail-fast: false
                 # locale: ${{ fromJSON(needs.changedFiles.outputs.locales) }}
                 locale: [DE, AU, FR, GB]
                 node: [12]
