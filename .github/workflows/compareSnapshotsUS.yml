@@ -1,4 +1,4 @@
-name: Snapshot Comparison Tests
+name: Snapshot Comparison Tests - US
 on:
     # allow for manual triggers
     workflow_dispatch: {}
@@ -48,8 +48,8 @@ jobs:
         name: US
         runs-on: ubuntu-latest
         strategy:
+            fail-fast: false
             matrix:
-                fail-fast: false
                 testPathPattern: [banner/text, banner/flex, modal/calc, modal/base, custom]
                 node: [12]
         steps:

@@ -1,4 +1,4 @@
-name: Update Snapshots
+name: Update Snapshots - Non-US
 on:
     # allow for manual triggers
     workflow_dispatch: {}
