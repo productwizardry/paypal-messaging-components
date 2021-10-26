@@ -14,7 +14,8 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                locale: [DE, AU, FR, GB]
+                # locale: [DE, AU, FR, GB]
+                locale: [AU]
                 node: [12]
         steps:
             - name: Checkout repo
