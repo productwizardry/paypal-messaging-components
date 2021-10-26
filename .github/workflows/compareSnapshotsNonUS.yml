@@ -63,8 +63,6 @@ jobs:
 
     compareSnapshots:
         name: Non-US
-        # if: "!contains(github.event.head_commit.message, '[snapshots]')"
-        if: "!contains(github.event.pull_request.labels.*.name, 'snapshots')"
         runs-on: ubuntu-latest
         # needs: changedFiles
         strategy:

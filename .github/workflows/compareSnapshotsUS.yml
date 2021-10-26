@@ -46,8 +46,6 @@ on:
 jobs:
     compareSnapshots:
         name: US
-        # if: "!contains(github.event.head_commit.message, '[snapshots]')"
-        if: "!contains(github.event.pull_request.labels.*.name, 'snapshots')"
         runs-on: ubuntu-latest
         strategy:
             matrix:
